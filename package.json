@@ -1,0 +1,33 @@
+{
+  "name": "typescript-rest",
+  "version": "1.0.0",
+  "description": "RestAPI",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node-dev --inspect=9229 --transpile-only --ignore-watch node_modules ./src/server.ts",
+    "build": "echo 'Building application...' && echo 'Timestamp: $(date)' && tsc && echo 'Build successful!'",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Rest",
+    "API",
+    "Typescript"
+  ],
+  "author": "Puty YAN",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.1",
+    "inversify": "^6.0.2",
+    "morgan": "^1.10.0",
+    "reflect-metadata": "^0.2.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/morgan": "^1.9.9",
+    "@types/node": "^20.11.30",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.4.3"
+  }
+}
