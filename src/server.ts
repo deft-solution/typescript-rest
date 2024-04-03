@@ -1,9 +1,13 @@
 import 'reflect-metadata';
+import './services';
 
 import * as dotenv from 'dotenv';
 import express, { Application } from 'express';
 import morgan from 'morgan';
 import * as path from 'path';
+
+import { REST } from '../libs';
+import controllers from './controllers';
 
 class Server {
   private app: Application;
@@ -34,8 +38,14 @@ class Server {
     this.app.use(express.urlencoded({ extended: true }));
   }
 
+  private _routes() {
+    REST.useIoC();
+    REST.buildServices(this.app, ...controllers);
+  }
+
   public start() {
     this.app.listen(this.app.get("port"), () => {
+      this._routes();
       console.log(("App is running at http://localhost:%d in %s mode"), this.app.get("port"), this.app.get("env"));
       console.log("Press CTRL-C to stop\n");
     });
