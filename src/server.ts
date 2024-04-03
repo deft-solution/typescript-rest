@@ -6,7 +6,7 @@ import express, { Application } from 'express';
 import morgan from 'morgan';
 import * as path from 'path';
 
-import { REST } from '../libs';
+import { ErrorCode, HttpError, InternalServerError, NotFoundError, REST } from '../libs';
 import controllers from './controllers';
 
 class Server {
@@ -41,7 +41,37 @@ class Server {
   private _routes() {
     REST.useIoC();
     REST.buildServices(this.app, ...controllers);
+    this.handlerError();
   }
+
+  private handlerError() {
+    // catch 404 and forward to error handler
+    this.app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
+      const err = new NotFoundError("Not found");
+      next(err);
+    });
+
+    // catch exceptions
+    this.app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+      // Handle known exceptions
+      if (err instanceof HttpError) {
+        const httpError = err as HttpError;
+        res
+          .status(httpError.statusCode)
+          .json(httpError.toJSON());
+        return;
+      }
+      // Handle uncaught or unknown exceptions
+      if (err instanceof Error) {
+        const error = new InternalServerError(`Uncaught Exception: ${err.message}`);
+        res
+          .status(ErrorCode.InternalServerError)
+          .json(error.toJSON());
+      }
+      next(err);
+    });
+  }
+
 
   public start() {
     this.app.listen(this.app.get("port"), () => {
