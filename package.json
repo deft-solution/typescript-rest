@@ -4,9 +4,11 @@
   "description": "RestAPI",
   "main": "index.js",
   "scripts": {
+    "watch-debug": "nodemon --inspect ./dist/src/server.js",
+    "debug": "npm run build && npm run watch-debug",
+    "dev": "nodemon --exec ts-node ./src/server.ts",
     "start": "ts-node-dev --inspect=9229 --transpile-only --ignore-watch node_modules ./src/server.ts",
-    "build": "echo 'Building application...' && echo 'Timestamp: $(date)' && tsc && echo 'Build successful!'",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "rm -rf dist && tsc"
   },
   "keywords": [
     "Rest",
@@ -28,6 +30,7 @@
     "@types/lodash": "^4.17.0",
     "@types/morgan": "^1.9.9",
     "@types/node": "^20.11.30",
+    "nodemon": "^3.1.0",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.4.3"
