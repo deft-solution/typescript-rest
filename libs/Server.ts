@@ -59,8 +59,8 @@ export class ServerContainer {
     if (!classData.methods.has(methodName)) {
       classData.methods.set(methodName, new ServiceMethod());
     }
-    const serviceMethod: ServiceMethod = classData.methods.get(methodName) ?? new ServiceMethod();
-    return serviceMethod;
+
+    return classData.methods.get(methodName) ?? new ServiceMethod();
   }
 
   async buildService(serviceClass: ServiceClass, serviceMethod: ServiceMethod) {
