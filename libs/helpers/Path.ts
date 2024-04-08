@@ -1,8 +1,6 @@
-
-export function pathResolver(classPath: string, methodPath: string): string {
-  const classPathResolve = resolvingPathString(classPath);
-  const methodPathResolve = resolvingPathString(methodPath);
-  return [classPathResolve, methodPathResolve].join('');
+export function pathResolver(paths: string[]): string {
+  const resolvedPaths = paths.map((path) => resolvingPathString(path));
+  return resolvedPaths.join('');
 }
 
 function resolvingPathString(path: string) {

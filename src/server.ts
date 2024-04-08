@@ -40,7 +40,7 @@ class Server {
 
   private _routes() {
     REST.useIoC();
-    REST.buildServices(this.app, ...controllers);
+    REST.buildServices(this.app, '/api', ...controllers);
     this.handlerError();
   }
 

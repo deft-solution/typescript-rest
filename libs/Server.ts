@@ -10,6 +10,7 @@ export class ServerContainer {
   static serverClasses: Map<string, ServiceClass> = new Map<string, ServiceClass>();
   static paths: Map<string, Set<HttpMethod>> = new Map<string, Set<HttpMethod>>();
   static pathsResolved: boolean = false;
+  public rootPrefix = '';
 
   static serviceFactory: ServiceFactory = {
     create: (serviceClass: any) => {
@@ -52,9 +53,20 @@ export class ServerContainer {
     ServerContainer.pathsResolved = true;
   }
 
+  static registerServiceMethod(target: Function, methodName: string) {
+    const classData: ServiceClass = ServerContainer.registerServiceClass(target);
+
+    if (!classData.methods.has(methodName)) {
+      classData.methods.set(methodName, new ServiceMethod());
+    }
+    const serviceMethod: ServiceMethod = classData.methods.get(methodName) ?? new ServiceMethod();
+    return serviceMethod;
+  }
+
   async buildService(serviceClass: ServiceClass, serviceMethod: ServiceMethod) {
     const serviceObject = this.createService(serviceClass);
-    const path = pathResolver(serviceClass.path ?? '', serviceMethod.path ?? '');
+    const paths = [this.rootPrefix, serviceClass.path ?? '', serviceMethod.path ?? '']
+    const path = pathResolver(paths);
     serviceMethod.resolvedPath = path;
 
     const handler = async (request: Request, res: Response, next: NextFunction) => {
@@ -112,16 +124,6 @@ export class ServerContainer {
       default:
         throw new Error("HttpMethod is not supported!.");
     }
-  }
-
-  static registerServiceMethod(target: Function, methodName: string) {
-    const classData: ServiceClass = ServerContainer.registerServiceClass(target);
-
-    if (!classData.methods.has(methodName)) {
-      classData.methods.set(methodName, new ServiceMethod());
-    }
-    const serviceMethod: ServiceMethod = classData.methods.get(methodName) ?? new ServiceMethod();
-    return serviceMethod;
   }
 
 
