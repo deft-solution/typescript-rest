@@ -13,8 +13,9 @@ export class REST {
   /**
    * Create the routes for all classes decorated with our decorators
    */
-  static buildServices(router: Router, ...types: any[]) {
+  static buildServices(router: Router, rootPrefix = '', ...types: any[]) {
     const iternalRESTFul: ServerContainer = new ServerContainer(router);
+    iternalRESTFul.rootPrefix = rootPrefix;
     iternalRESTFul.buildServices(types);
   }
 
