@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { RequestHandler, Router } from 'express';
 
 import { container } from '../inversify/container';
 import { ServiceFactory } from '../meta';
@@ -8,6 +8,15 @@ export class REST {
 
   static register<T>(name: string, serviceImpl: any) {
     container.bind<T>(name).to(serviceImpl);
+  }
+
+  /**
+   * Register authorization middleware handler.
+   * @param middleware Express middleware to handle authorization
+   */
+
+  static registerAuthorizationMiddleware(middleware: RequestHandler) {
+    ServerContainer.authorizationMiddleware = middleware;
   }
 
   /**

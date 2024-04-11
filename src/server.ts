@@ -8,6 +8,7 @@ import * as path from 'path';
 
 import { ErrorCode, HttpError, InternalServerError, NotFoundError, REST } from '../libs';
 import controllers from './controllers';
+import Authentications from './middlewares/Authentications';
 
 class Server {
   private app: Application;
@@ -39,6 +40,7 @@ class Server {
   }
 
   private _routes() {
+    REST.registerAuthorizationMiddleware(Authentications);
     REST.useIoC();
     REST.buildServices(this.app, '/api', ...controllers);
     this.handlerError();

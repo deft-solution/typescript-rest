@@ -1,7 +1,7 @@
-import { Request } from 'express';
+import express from 'express';
 import { inject, injectable } from 'inversify';
 
-import { ContextRequest, Controller, GET, Middleware } from '../../libs';
+import { Authorization, ContextRequest, Controller, GET, Middleware } from '../../libs';
 import { loggerA, loggerB, loggerC } from '../middlewares';
 import { Baby } from '../models/Baby';
 import { BabyService } from '../services';
@@ -15,10 +15,11 @@ export class BabyController {
 
   @GET('/v1/list')
   @Middleware(loggerA)
+  @Authorization
   async getAllBaby(
-    @ContextRequest req: Request,
+    @ContextRequest req: express.Request,
   ): Promise<{ message: string }> {
-    return { message: req.body };
+    return { message: req.message ?? '' };
   }
 
   @GET('/v2/list')

@@ -1,4 +1,4 @@
-import { Request, Response, Router } from 'express';
+import { Request, RequestHandler, Response, Router } from 'express';
 import { NextFunction } from 'express-serve-static-core';
 
 import { ServiceContext } from './classes';
@@ -19,6 +19,10 @@ export class ServerContainer {
     getTargetClass: (serviceClass: Function) => {
       return <FunctionConstructor>serviceClass;
     }
+  };
+
+  static authorizationMiddleware: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
+    next();
   };
 
   static registerServiceClass(target: Function): ServiceClass {
@@ -79,6 +83,7 @@ export class ServerContainer {
         next(error)
       }
     }
+
     this._registerRoute(serviceMethod, handler);
   }
 
@@ -107,7 +112,14 @@ export class ServerContainer {
   }
 
   private _registerRoute(serviceMethod: ServiceMethod, handler: any) {
-    const args = serviceMethod.middlewares.concat(handler);
+    const args = [];
+
+    if (serviceMethod.requiresAuthorization) {
+      args.push(ServerContainer.authorizationMiddleware);
+    }
+
+    args.push(...serviceMethod.middlewares);
+    args.push(handler);
 
     switch (serviceMethod.httpMethod) {
       case HttpMethod.GET:
