@@ -10,7 +10,6 @@ export class ServerContainer {
   static serverClasses: Map<string, ServiceClass> = new Map<string, ServiceClass>();
   static paths: Map<string, Set<HttpMethod>> = new Map<string, Set<HttpMethod>>();
   static pathsResolved: boolean = false;
-  public rootPrefix = '';
 
   static serviceFactory: ServiceFactory = {
     create: (serviceClass: any) => {
@@ -37,6 +36,7 @@ export class ServerContainer {
     return serviceClass;
   }
 
+  public rootPrefix = '';
   router: Router;
 
   constructor(router: Router) {
