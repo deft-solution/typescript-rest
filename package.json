@@ -6,7 +6,6 @@
   "scripts": {
     "watch-debug": "nodemon --inspect ./dist/src/server.js",
     "debug": "npm run build && npm run watch-debug",
-    "dev": "nodemon --exec ts-node ./src/server.ts",
     "start": "ts-node-dev --inspect=9229 --transpile-only --ignore-watch node_modules ./src/server.ts",
     "build": "rm -rf dist && tsc"
   },
